@@ -37,8 +37,8 @@ jobs:
         echo "${{ secrets.KUBECONFIG }}" > $KUBE_CONFIG_PATH
         export KUBECONFIG=$KUBE_CONFIG_PATH
 
-    # Step 5: Deploy to Kubernetes
-    - name: Deploy to Kubernetes
+    # Step 5: Force restart Kubernetes deployment to pull latest image
+    - name: Force restart Kubernetes deployment to pull latest image
       run: |
-        kubectl set image deployment/my-app my-app=${{ secrets.DOCKER_USERNAME }}/my-app:latest
-        kubectl rollout status deployment/my-app
+        kubectl rollout restart deployment/my-app  # This forces Kubernetes to pull the latest image
+        kubectl rollout status deployment/my-app  # Wait for the restart to finish
