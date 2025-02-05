@@ -1,0 +1,44 @@
+name: Build, Push, and Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-push-deploy:
+    runs-on: self-hosted
+
+    env:
+      KUBE_CONFIG_PATH: "/tmp/kubeconfig"
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Log in to Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Step 3: Build and push Docker image to Docker Hub
+    - name: Build and push Docker image
+      run: |
+        docker build -t my-app:latest .
+        docker tag my-app:latest ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+
+    # Step 4: Set up kubeconfig
+    - name: Set up kubeconfig
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" > $KUBE_CONFIG_PATH
+        export KUBECONFIG=$KUBE_CONFIG_PATH
+
+    # Step 5: Deploy to Kubernetes
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl set image deployment/my-app my-app=${{ secrets.DOCKER_USERNAME }}/my-app:latest
+        kubectl rollout status deployment/my-app
