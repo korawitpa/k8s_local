@@ -1,0 +1,9 @@
+﻿{
+  "agentId": 2,
+  "agentName": "DESKTOP-3DV78BJ",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus14.actions.githubusercontent.com/npC70WfbtwUrivGSiXglOuPlvVoEJZvf0RlhqVrxY2nF7ao3Xo/",
+  "gitHubUrl": "https://github.com/korawitpa/k8s_local",
+  "workFolder": "_work"
+}
