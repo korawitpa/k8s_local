@@ -9,8 +9,8 @@ jobs:
   build-push-deploy:
     runs-on: self-hosted
 
-    env:
-      KUBE_CONFIG_PATH: "/tmp/kubeconfig"
+    # env:
+    #   KUBE_CONFIG_PATH: "/tmp/kubeconfig"
 
     steps:
     # Step 1: Checkout the repository
@@ -31,11 +31,11 @@ jobs:
         docker tag my-app:latest ${{ secrets.DOCKER_USERNAME }}/my-app:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
 
-    # Step 4: Set up kubeconfig
-    - name: Set up kubeconfig
-      run: |
-        echo "${{ secrets.KUBECONFIG }}" > $KUBE_CONFIG_PATH
-        export KUBECONFIG=$KUBE_CONFIG_PATH
+    # # Step 4: Set up kubeconfig
+    # - name: Set up kubeconfig
+    #   run: |
+    #     echo "${{ secrets.KUBECONFIG }}" > $KUBE_CONFIG_PATH
+    #     export KUBECONFIG=$KUBE_CONFIG_PATH
 
     # Step 5: Force restart Kubernetes deployment to pull latest image
     - name: Force restart Kubernetes deployment to pull latest image
